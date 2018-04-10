@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/')
 @app.route('/restaurants/<int:rest_id>/')
-def print_restaurants(rest_id):
+def print_menu_items(rest_id):
     session = create_db_session()
 
     menu_items = session.query(MenuItem).filter_by(restaurant_id = rest_id)
