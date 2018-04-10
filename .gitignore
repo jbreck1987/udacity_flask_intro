@@ -4,3 +4,4 @@
 /vagrant/catalog
 /vagrant/.vagrant/
 *.aws
+*.pyc
