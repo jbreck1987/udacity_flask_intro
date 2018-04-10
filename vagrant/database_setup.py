@@ -38,6 +38,7 @@ class MenuItem(Base):
 # END OF FILE
 # create engine to be used by app modules
 engine = create_engine('sqlite:///restaurantmenu.db')
+Base.metadata.create_all(engine)
 
 
 def create_db_session():
