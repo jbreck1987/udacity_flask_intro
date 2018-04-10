@@ -1,0 +1,6 @@
+*.sql
+/vagrant/tournament
+/vagrant/forum
+/vagrant/catalog
+/.vagrant/*/
+*.aws
