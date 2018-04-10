@@ -4,12 +4,11 @@ from database_setup import create_db_session, Restaurant, MenuItem
 app = Flask(__name__)
 
 @app.route('/')
-@app.route('/restaurants/')
-def print_restaurants():
+@app.route('/restaurants/<int:rest_id>/')
+def print_restaurants(rest_id):
     session = create_db_session()
 
-    restaurant = session.query(Restaurant).first()
-    menu_items = session.query(MenuItem).filter_by(restaurant_id = restaurant.Id)
+    menu_items = session.query(MenuItem).filter_by(restaurant_id = rest_id)
 
     session.close()
 
