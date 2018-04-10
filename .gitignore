@@ -2,5 +2,5 @@
 /vagrant/tournament
 /vagrant/forum
 /vagrant/catalog
-/.vagrant/*/
+/vagrant/.vagrant/
 *.aws
