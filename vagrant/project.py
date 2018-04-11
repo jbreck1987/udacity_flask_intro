@@ -3,6 +3,7 @@ from database_setup import create_db_session, Restaurant, MenuItem
 
 app = Flask(__name__)
 
+
 @app.route('/')
 @app.route('/restaurants/<int:rest_id>/')
 def print_menu_items(rest_id):
@@ -13,12 +14,16 @@ def print_menu_items(rest_id):
 
     session.close()
 
-    return render_template('template.html', restaurant=restaurant, menu_items=menu_items)
+    return render_template(
+        'template.html',
+        restaurant=restaurant,
+        menu_items=menu_items)
 
 
 @app.route('/restaurants/new_menu_item/<int:restaurant_id>')
 def new_menu_item(restaurant_id):
     return "page to create a new menu item. Task 1 complete!"
+
 
 @app.route('/restaurants/edit_menu_item/<int:restaurant_id>/<int:menu_id>')
 def edit_menu_item(restaurant_id, menu_id):
