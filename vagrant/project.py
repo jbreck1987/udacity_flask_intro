@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, flash
 from database_setup import create_db_session, Restaurant, MenuItem
 
 app = Flask(__name__)
@@ -32,6 +32,9 @@ def new_menu_item(restaurant_id):
     session.add(new_item)
     session.commit()
 
+    # Create a flash message to indicate that a new item was added
+    flash('New item created!')
+
     # Redirect user back to the menu page for the restaurant that
     # was just modified
     return redirect(url_for('print_menu_items', restaurant_id=restaurant_id))
@@ -42,7 +45,7 @@ def new_menu_item(restaurant_id):
 def edit_menu_item(restaurant_id, menu_id):
     if request.method == 'GET':
         session = create_db_session()
-        menu_item = session.query(MenuItem).filter_by(Id=menu_id, restaurant_id=restaurant_id).first()
+        menu_item = session.query(MenuItem).filter_by(Id=menu_id, restaurant_id=restaurant_id).one()
 
         # Return template for editing a menu item
         return render_template('tp_edit_menu_item.html', restaurant_id=restaurant_id, menu_id=menu_id, menu_item=menu_item)
@@ -57,16 +60,34 @@ def edit_menu_item(restaurant_id, menu_id):
         synchronize_session=False)
     session.commit()
 
+    # Create a flash message to indicate that an item was edited
+    flash('Item was edited!')
+
     # Redirect user back to the menu page for the restaurant that
     # was just modified
     return redirect(url_for('print_menu_items', restaurant_id=restaurant_id))
 
 
-@app.route('/restaurants/delete_menu_item/<int:restaurant_id>/<int:menu_id>')
+@app.route('/restaurants/delete_menu_item/<int:restaurant_id>/<int:menu_id>', methods=['GET', 'POST'])
 def delete_menu_item(restaurant_id, menu_id):
-    return "page to delete a menu item. Task 3 complete!"
+    if request.method == 'GET':
+        session = create_db_session()
+        menu_item = session.query(MenuItem).filter_by(Id=menu_id).one()
+        return render_template('tp_delete_menu_item.html', item=menu_item)
+
+    session = create_db_session()
+    session.query(MenuItem).filter(
+        MenuItem.Id == menu_id).delete(
+        synchronize_session=False)
+    session.commit()
+
+    # Create a flash message to indicate that an item was deleted
+    flash('Item was deleted!')
+
+    return redirect(url_for('print_menu_items', restaurant_id=restaurant_id))
 
 
 if __name__ == '__main__':
+    app.secret_key = 'test_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
